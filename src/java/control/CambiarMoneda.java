@@ -1,5 +1,4 @@
-
-package view;
+package control;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -9,21 +8,34 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
-/**
- *
- * @author ferch
- */
-public class Inicio extends HttpServlet {
+public class CambiarMoneda extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         HttpSession sesion = request.getSession();
-        if(sesion.getAttribute("moneda")==null){
-            sesion.setAttribute("moneda", "MXN");
-            sesion.setAttribute("nom_moneda", "$ Pesos");
+        if (request.getParameter("moneda") != null) {
+            switch (request.getParameter("moneda")) {
+                case "COP":
+                    sesion.setAttribute("moneda", request.getParameter("moneda"));
+                    sesion.setAttribute("nom_moneda", "$ Pesos Colombianos");
+                    break;
+                case "USD":
+                    sesion.setAttribute("moneda", request.getParameter("moneda"));
+                    sesion.setAttribute("nom_moneda", "$ Dolar(USA)");
+                    break;
+                case "PEN":
+                    sesion.setAttribute("moneda", request.getParameter("moneda"));
+                    sesion.setAttribute("nom_moneda", "$ Sol Peruano");
+                    break;
+                default:
+                    sesion.setAttribute("moneda", "MXN");
+                    sesion.setAttribute("nom_moneda", "$ Pesos Mexicanos");
+                    break;
+            }
+
         }
-        request.getRequestDispatcher("WEB-INF/index.jsp").forward(request, response);
+        response.sendRedirect("Inicio");
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

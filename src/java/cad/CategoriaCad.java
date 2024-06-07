@@ -53,4 +53,19 @@ public class CategoriaCad {
             return null;
         }
     }
+    
+    public static boolean esSuperior(int cat){
+        try {
+            String sql="{call sp_contarSubCategorias(?)}";
+            Connection c = Conexion.conectar();
+            CallableStatement sentencia = (CallableStatement) c.prepareCall(sql);
+            sentencia.setInt(1, cat);
+            ResultSet resultado = sentencia.executeQuery();
+            
+            resultado.next();
+            return resultado.getInt("cantidad")>0;
+        } catch (SQLException ex) {
+            return false;
+        }
+    }
 }
